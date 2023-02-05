@@ -1,0 +1,2 @@
+1. Retrieve more details
+2. Calculate score for domains

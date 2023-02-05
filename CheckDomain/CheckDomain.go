@@ -11,6 +11,7 @@ func CheckDomain(domain string) {
 
 	var hasMX, hasSPF, hasDMARC bool
 	var spfRecord, dmarcRecord string
+	score := 0
 
 	//	1. checking for MX Records
 	mxRecords, err := net.LookupMX(domain)
@@ -19,6 +20,7 @@ func CheckDomain(domain string) {
 	}
 	if len(mxRecords) > 0 {
 		hasMX = true
+		score++
 	}
 
 	//	2. checking for TXT Records
@@ -30,6 +32,7 @@ func CheckDomain(domain string) {
 	for _, record := range txtRecords {
 		if strings.HasPrefix(record, "v=spf1") {
 			hasSPF = true
+			score++
 			spfRecord = record
 			break
 		}
@@ -43,10 +46,12 @@ func CheckDomain(domain string) {
 	for _, record := range dmarcRecords {
 		if strings.HasPrefix(record, "v=DMARC1") {
 			hasDMARC = true
+			score++
 			dmarcRecord = record
 			break
 		}
 	}
+
 	//Displaying records
 	fmt.Println("-------------------------------------")
 	fmt.Printf("Domain Name : %v ", domain)
